@@ -4,84 +4,110 @@
 
 byte row_codes[] = { 0xBF, 0xDF, 0xEF, 0xF7, 0xFB, 0xFD, 0xFE };
 
+int8_t row_pins[] = { 2, 3, 4, 5, 6, 7 };
+int8_t col_pins[] = { A3, A2, A1, A0, 15, 14 };
+
+int flag = 0;
+
 KeyboardMgr::KeyboardMgr(int Rx_pin, int Tx_pin, byte _mcp23018_addr) {
     left_ble = new SoftwareSerial(Rx_pin, Tx_pin);
     mcp23018_addr = _mcp23018_addr;
-    key_def[0] = KEY_ESC;
-    key_def[1] = '1';
-    key_def[2] = '2';
-    key_def[3] = '3';
-    key_def[4] = '4';
-    key_def[5] = '5';
-    key_def[6] = '`';
-    key_def[14] = KEY_TAB;
-    key_def[15] = 'q';
-    key_def[16] = 'w';
-    key_def[17] = 'e';
-    key_def[18] = 'r';
-    key_def[19] = 't';
-    key_def[20] = KEY_LEFT_GUI;
-    key_def[28] = KEY_LEFT_CTRL;
-    key_def[29] = 'a';
-    key_def[30] = 's';
-    key_def[31] = 'd';
-    key_def[32] = 'f';
-    key_def[33] = 'g';
-    key_def[42] = KEY_LEFT_SHIFT;
-    key_def[43] = 'z';
-    key_def[44] = 'x';
-    key_def[45] = 'c';
-    key_def[46] = 'v';
-    key_def[47] = 'b';
-    key_def[48] = KEY_LEFT_ALT;
-    key_def[59] = KEY_LEFT_CTRL;
-    key_def[60] = KEY_LEFT_ALT;
-    key_def[71] = KEY_ESC;
-    key_def[72] = KEY_LEFT_GUI;
-    key_def[73] = ' ';
-    key_def[74] = KEY_PAGE_DOWN;
-    key_def[76] = KEY_PAGE_UP;
+    key_def[0] = KEY_TAB;
+    key_def[1] = 113;
+    key_def[2] = 119;
+    key_def[3] = 101;
+    key_def[4] = 114;
+    key_def[5] = 116;
 
-    key_def[7] = '=';
-    key_def[8] = '6';
-    key_def[9] = '7';
-    key_def[10] = '8';
-    key_def[11] = '9';
-    key_def[12] = '0';
-    key_def[13] = KEY_BACKSPACE;
-    key_def[21] = '=';
-    key_def[22] = 'y';
-    key_def[23] = 'u';
-    key_def[24] = 'i';
-    key_def[25] = 'o';
-    key_def[26] = 'p';
-    key_def[27] = '\\';
-    key_def[36] = 'h';
-    key_def[37] = 'j';
-    key_def[38] = 'k';
-    key_def[39] = 'l';
-    key_def[40] = ';';
-    key_def[41] = '\'';
-    key_def[49] = '-';
-    key_def[50] = 'n';
-    key_def[51] = 'm';
-    key_def[52] = ',';
-    key_def[53] = '.';
-    key_def[54] = '/';
-    key_def[55] = KEY_RIGHT_SHIFT;
-    key_def[66] = KEY_LEFT_ARROW;
-    key_def[67] = KEY_DOWN_ARROW;
-    key_def[68] = KEY_UP_ARROW;
-    key_def[69] = KEY_RIGHT_ARROW;
-    key_def[78] = KEY_RIGHT_GUI;
-    key_def[80] = KEY_RETURN;
-    key_def[82] = KEY_RIGHT_SHIFT;
+    key_def[12] = KEY_CAPS_LOCK;
+    key_def[13] = 97;
+    key_def[14] = 115;
+    key_def[15] = 100;
+    key_def[16] = 102;
+    key_def[17] = 103;
+    
+    key_def[24] = KEY_LEFT_SHIFT;
+    key_def[25] = 122;
+    key_def[26] = 120;
+    key_def[27] = 99;
+    key_def[28] = 118;
+    key_def[29] = 98;
+
+    key_def[36] = 0;
+    key_def[37] = 0;
+    key_def[38] = KEY_LEFT_CTRL;
+    key_def[39] = KEY_LEFT_GUI;
+    key_def[40] = KEY_LEFT_ALT;
+    key_def[41] = 32;
+
+    key_def[48] = 0;
+    key_def[49] = 0;
+    key_def[50] = 0;
+    key_def[51] = 0;
+    key_def[52] = 51;
+    key_def[53] = 49;
+
+    key_def[60] = 0;
+    key_def[61] = 0;
+    key_def[62] = 0;
+    key_def[63] = 0;
+    key_def[64] = 52;
+    key_def[65] = 50;
+
+    key_def[6] = 121;
+    key_def[7] = 117;
+    key_def[8] = 105;
+    key_def[9] = 111;
+    key_def[10] = 112;
+    key_def[11] = 92;
+    
+    key_def[18] = 104;
+    key_def[19] = 106;
+    key_def[20] = 107;
+    key_def[21] = 188;
+    key_def[22] = 59;
+    key_def[23] = 44;
+
+    key_def[30] = 110;
+    key_def[31] = 109;
+    key_def[32] = 44;
+    key_def[33] = 46;
+    key_def[34] = 91;
+    key_def[35] = 93;
+
+    key_def[42] = KEY_RETURN;
+    key_def[43] = KEY_BACKSPACE;
+    key_def[44] = 45;
+    key_def[45] = 61;
+    key_def[46] = 0;
+    key_def[47] = 0;
+
+    key_def[54] = 54;
+    key_def[55] = 56;
+    key_def[56] = 0;
+    key_def[57] = 0;
+    key_def[58] = 0;
+    key_def[59] = 0;
+
+    key_def[66] = 53;
+    key_def[67] = 55;
+    key_def[68] = 0;
+    key_def[69] = 0;
+    key_def[70] = 0;
+    key_def[71] = 0;
 }
 
 void KeyboardMgr::begin() {
+    for (int8_t pin : row_pins) {
+        pinMode(pin, OUTPUT);
+        digitalWrite(pin, LOW);
+    }
+    for (int8_t pin : col_pins) {
+        pinMode(pin, INPUT_PULLUP);
+    }
     left_ble->begin(BAUD_RATE);
     Keyboard.begin();
-    Wire.begin();
+/*     Wire.begin();
     Wire.setClock(400000UL);
 
     Wire.beginTransmission(mcp23018_addr);
@@ -97,24 +123,56 @@ void KeyboardMgr::begin() {
     Wire.beginTransmission(mcp23018_addr);
     Wire.write(0x0D);
     Wire.write(0xFF);
-    Wire.endTransmission();
+    Wire.endTransmission(); */
 }
 
 void KeyboardMgr::exec() {
-    for (uint8_t row = 0; row < 7; ++row) {
-        control_row(row_codes[row]);
-
-        Wire.beginTransmission(mcp23018_addr);
-        Wire.write(0x13);
-        Wire.endTransmission();
-        Wire.requestFrom(mcp23018_addr, (uint8_t)1);
-        byte col_data = Wire.read();
+    for (uint8_t row = 0; row < 6; ++row) {
+        
+        digitalWrite(row_pins[row], LOW);
+        
         for (uint8_t col = 0; col < 6; ++col) {
-            bool key_state = col_decoder(col_data, col);
+            bool key_state = digitalRead(col_pins[col]);
             if (keys[row][col].state_changed(key_state)) {
                 right_data.pressed = key_state;
-                right_data.matrix_idx = row + col * 14 + 7;
-                processKeyEvent(right_data);
+                right_data.matrix_idx = row + col * 12 + 6;
+                if(key_state == HIGH)
+                {
+                    if (col == 5 && row == 0)
+                    {
+                        flag = 0;
+                    }
+                    else
+                    {
+                        if (flag == 0)
+                        {
+                            processKeyEvent(right_data);
+                        }
+                        else
+                        {
+                            right_data.matrix_idx |= 0b10000000;//组合键
+                            processKeyEvent(right_data);
+                        }
+                    }
+                }
+                else
+                {
+                    if (col == 5 && row == 0)
+                    {
+                        flag = 1;
+                    }
+                    else
+                    {
+                        if (flag == 0) {
+                            processKeyEvent(right_data);
+                        }
+                        else
+                        {
+                            right_data.matrix_idx |= 0b10000000;
+                            processKeyEvent(right_data);
+                        }
+                    }
+                }
             }
         }
 
@@ -138,7 +196,7 @@ void KeyboardMgr::processKeyEvent(ParsedData data) {
 bool KeyboardMgr::read_from_left() {
     if (left_ble->available()) {
         uint8_t recv = left_ble->read();
-        if (recv & 0b10000000) {
+        if (recv & 0b100000000) {
             left_data.pressed = false;
             left_data.matrix_idx = (recv & 0b01111111);
         } else {
