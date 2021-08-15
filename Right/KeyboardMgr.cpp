@@ -95,6 +95,37 @@ KeyboardMgr::KeyboardMgr(int Rx_pin, int Tx_pin, byte _mcp23018_addr) {
     key_def[69] = 0;
     key_def[70] = 0;
     key_def[71] = 0;
+
+    key_fn_def[0] = KEY_F1;
+    key_fn_def[1] = KEY_F2;
+    key_fn_def[2] = KEY_F3;
+    key_fn_def[3] = KEY_F4;
+    key_fn_def[4] = KEY_F5;
+    key_fn_def[5] = KEY_F6;
+
+    key_fn_def[6] = KEY_F7;
+    key_fn_def[7] = KEY_F8;
+    key_fn_def[8] = KEY_F9;
+    key_fn_def[9] = KEY_F10;
+    key_fn_def[10] = KEY_F11;
+    key_fn_def[11] = KEY_F12;
+
+    key_fn_def[12] = '1';
+    key_fn_def[13] = '2';
+    key_fn_def[14] = '3';
+    key_fn_def[15] = '4';
+    key_fn_def[16] = '6';
+    
+    key_fn_def[17] = '7';
+    key_fn_def[18] = '8';
+    key_fn_def[19] = '9';
+    key_fn_def[20] = '0';
+    key_fn_def[21] = '-';
+    key_fn_def[22] = '+';
+
+    key_fn_def[23] = 0;
+    key_fn_def[24] = 0;
+    key_fn_def[25] = 
 }
 
 void KeyboardMgr::begin() {
@@ -164,6 +195,7 @@ void KeyboardMgr::exec() {
                     else
                     {
                         if (flag == 0) {
+
                             processKeyEvent(right_data);
                         }
                         else
@@ -177,15 +209,17 @@ void KeyboardMgr::exec() {
         }
 
         while (read_from_left()) {
+            
             processKeyEvent(left_data);
         }
+        digitalWrite(row_pins[row], HIGH);
     }
 }
 
 void KeyboardMgr::processKeyEvent(ParsedData data) {
     char key_char = key_def[data.matrix_idx];
     if (key_char != 0) {
-        if (data.pressed) {
+        if (!data.pressed) {
             Keyboard.press(key_char);
         } else {
             Keyboard.release(key_char);
@@ -195,12 +229,12 @@ void KeyboardMgr::processKeyEvent(ParsedData data) {
 
 bool KeyboardMgr::read_from_left() {
     if (left_ble->available()) {
-        uint8_t recv = left_ble->read();
-        if (recv & 0b100000000) {
-            left_data.pressed = false;
+        int recv = char(left_ble->read());
+        if (recv & 0b10000000) {
+            left_data.pressed = true;
             left_data.matrix_idx = (recv & 0b01111111);
         } else {
-            left_data.pressed = true;
+            left_data.pressed = false;
             left_data.matrix_idx = recv;
         }
         return true;

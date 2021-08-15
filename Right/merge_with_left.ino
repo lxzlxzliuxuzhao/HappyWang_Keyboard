@@ -1,6 +1,6 @@
 #include "KeyboardMgr.h"
 
-KeyboardMgr keyboardMgr(8, 7, 0x20);
+KeyboardMgr keyboardMgr(10, 9, 0x20);
 
 void setup() {
     delay(200);

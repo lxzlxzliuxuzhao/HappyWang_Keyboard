@@ -7,6 +7,7 @@
 
 int flag = 0;
 
+
 int8_t row_pins[] = { 2, 3, 4, 5, 6, 7 };
 int8_t col_pins[] = { A1, A0, 15, 14, 16, 10 };
 
@@ -33,7 +34,8 @@ void loop() {
         for (int8_t col = 0; col < 6; ++col) {
             bool key_state = digitalRead(col_pins[col]);
             if (keys[row][col].state_changed(key_state)) {
-                uint8_t matrix_idx = row + col * 14;
+                
+                int matrix_idx = col + (5 - row) * 12;
                 if (key_state == HIGH) {
                     if (col == 5 && row == 0)
                     {
@@ -43,11 +45,11 @@ void loop() {
                     {
                         if (flag == 0)
                         {
-                            matrix_idx |= 0b100000000;
+                            matrix_idx |= 0b10000000;
                         }
                         else
                         {
-                            matrix_idx |= 0b110000000;//组合键
+                            matrix_idx |= 0b11000000;//组合键
                         }
                     }
                 }
@@ -65,7 +67,8 @@ void loop() {
                         }
                     }
                 }
-                BT.print((char)matrix_idx);
+                Serial.println(matrix_idx);
+                BT.print(char(matrix_idx));
             }
         }
 
