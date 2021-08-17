@@ -46,10 +46,14 @@ void loop() {
                         if (flag == 0)
                         {
                             matrix_idx |= 0b10000000;
+                            BT.print(char(matrix_idx));
                         }
                         else
                         {
-                            matrix_idx |= 0b11000000;//组合键
+
+                            matrix_idx += 72;
+                            matrix_idx |= 0b10000000;//组合键
+                            BT.print(char(matrix_idx));
                         }
                     }
                 }
@@ -63,12 +67,16 @@ void loop() {
                     {
                         if ( flag == 1)  
                         {
-                            matrix_idx |= 0b010000000;//组合键
+                            matrix_idx += 72;//组合键
+                            BT.print(char(matrix_idx));
+                        }
+                        else
+                        {
+                            BT.print(char(matrix_idx));
                         }
                     }
                 }
                 Serial.println(matrix_idx);
-                BT.print(char(matrix_idx));
             }
         }
 

@@ -24,6 +24,7 @@ private:
     ParsedData left_data;
     ParsedData right_data;
     char key_def[84];
+    char key_fn_def[84];
     byte mcp23018_addr;
     KeyBtn keys[7][6];
 };

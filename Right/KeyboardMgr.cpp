@@ -114,18 +114,43 @@ KeyboardMgr::KeyboardMgr(int Rx_pin, int Tx_pin, byte _mcp23018_addr) {
     key_fn_def[13] = '2';
     key_fn_def[14] = '3';
     key_fn_def[15] = '4';
-    key_fn_def[16] = '6';
-    
-    key_fn_def[17] = '7';
-    key_fn_def[18] = '8';
-    key_fn_def[19] = '9';
-    key_fn_def[20] = '0';
-    key_fn_def[21] = '-';
-    key_fn_def[22] = '+';
+    key_fn_def[16] = '5';
+    key_fn_def[17] = '6';
 
-    key_fn_def[23] = 0;
+    key_fn_def[18] = '7';
+    key_fn_def[19] = '8';
+    key_fn_def[20] = '9';
+    key_fn_def[21] = '0';
+    key_fn_def[22] = '-';
+    key_fn_def[23] = '=';
+
     key_fn_def[24] = 0;
-    key_fn_def[25] = 
+    key_fn_def[25] = 0;
+    key_fn_def[26] = 0;
+    key_fn_def[27] = 0;
+    key_fn_def[28] = 0;
+    key_fn_def[29] = 0;
+
+    key_fn_def[30] = 0;
+    key_fn_def[31] = 0;
+    key_fn_def[32] = 0;
+    key_fn_def[33] = 0;
+    key_fn_def[34] = 0;
+    key_fn_def[35] = 0;
+
+    key_fn_def[36] = 0;
+    key_fn_def[37] = 0;
+    key_fn_def[38] = 0;
+    key_fn_def[39] = 0;
+    key_fn_def[40] = 0;
+    key_fn_def[41] = 0;
+
+    key_fn_def[42] = 0;
+    key_fn_def[43] = 0;
+    key_fn_def[44] = 0;
+    key_fn_def[45] = 0;
+    key_fn_def[46] = 0;
+    key_fn_def[47] = 0;
 }
 
 void KeyboardMgr::begin() {
@@ -181,7 +206,7 @@ void KeyboardMgr::exec() {
                         }
                         else
                         {
-                            right_data.matrix_idx |= 0b10000000;//组合键
+                            right_data.matrix_idx += 72;//组合键
                             processKeyEvent(right_data);
                         }
                     }
@@ -200,7 +225,7 @@ void KeyboardMgr::exec() {
                         }
                         else
                         {
-                            right_data.matrix_idx |= 0b10000000;
+                            right_data.matrix_idx += 72;
                             processKeyEvent(right_data);
                         }
                     }
@@ -217,7 +242,18 @@ void KeyboardMgr::exec() {
 }
 
 void KeyboardMgr::processKeyEvent(ParsedData data) {
-    char key_char = key_def[data.matrix_idx];
+    char key_char;
+    Serial.println(data.matrix_idx);
+    if (data.matrix_idx >= 72)
+    {
+        int idx = data.matrix_idx - 72;
+        key_char = key_fn_def[idx]; 
+    }
+    else
+    {
+        key_char = key_def[data.matrix_idx];  
+    }
+    Serial.println(key_char);
     if (key_char != 0) {
         if (!data.pressed) {
             Keyboard.press(key_char);
